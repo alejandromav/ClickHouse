@@ -39,6 +39,8 @@ ASTPtr getFixedPoint(const ASTPtr & ast)
     return nullptr;
 }
 
+/// Returns number of columns from the prefix of `sorting_key_columns` that are equal to the constant value.
+/// For example, if `sorting_key_columns` is {a, b, c, d}, and `query` contains `WHERE a = 1 AND b = 2 AND d = 3`, then returns 2.
 size_t calculateFixedPrefixSize(
     const ASTSelectQuery & query, const Names & sorting_key_columns)
 {
@@ -165,7 +167,7 @@ ReadInOrderOptimizer::ReadInOrderOptimizer(
     , required_sort_description(required_sort_description_)
     , query(query_)
 {
-    if (elements_actions.size() != required_sort_description.size())
+    if (!elements_actions.empty() && elements_actions.size() != required_sort_description.size())
         throw Exception("Sizes of sort description and actions are mismatched", ErrorCodes::LOGICAL_ERROR);
 
     /// Do not analyze joined columns.
@@ -178,12 +180,11 @@ ReadInOrderOptimizer::ReadInOrderOptimizer(
 }
 
 InputOrderInfoPtr ReadInOrderOptimizer::getInputOrderImpl(
-    const StorageMetadataPtr & metadata_snapshot,
+    const Names & sorting_key_columns,
     const SortDescription & description,
     const ManyExpressionActions & actions,
     UInt64 limit) const
 {
-    auto sorting_key_columns = metadata_snapshot->getSortingKeyColumns();
     int read_direction = description.at(0).direction;
 
     size_t fixed_prefix_size = calculateFixedPrefixSize(query, sorting_key_columns);
@@ -197,8 +198,10 @@ InputOrderInfoPtr ReadInOrderOptimizer::getInputOrderImpl(
         if (forbidden_columns.contains(description[i].column_name))
             break;
 
-        int current_direction = matchSortDescriptionAndKey(
-            actions[i]->getActions(), description[i], sorting_key_columns[i + fixed_prefix_size]);
+        int current_direction =  matchSortDescriptionAndKey(
+            actions.empty() ? ExpressionActions::Actions{} : actions[i]->getActions(),
+            description[i],
+            sorting_key_columns[i + fixed_prefix_size]);
 
         if (!current_direction || (i > 0 && current_direction != read_direction))
             break;
@@ -235,7 +238,9 @@ InputOrderInfoPtr ReadInOrderOptimizer::getInputOrder(
     /// Currently we only support alias column without any function wrapper,
     /// i.e.: `order by aliased_column` can have this optimization, but `order by function(aliased_column)` can not.
     /// This suits most cases.
-    if (context->getSettingsRef().optimize_respect_aliases && !aliased_columns.empty())
+    if (context->getSettingsRef().optimize_respect_aliases
+        && !elements_actions.empty()
+        && !aliased_columns.empty())
     {
         SortDescription aliases_sort_description = required_sort_description;
         ManyExpressionActions aliases_actions = elements_actions;
@@ -255,10 +260,10 @@ InputOrderInfoPtr ReadInOrderOptimizer::getInputOrder(
             aliases_actions[i] = expression_analyzer.getActions(true);
         }
 
-        return getInputOrderImpl(metadata_snapshot, aliases_sort_description, aliases_actions, limit);
+        return getInputOrderImpl(metadata_snapshot->getSortingKeyColumns(), aliases_sort_description, aliases_actions, limit);
     }
 
-    return getInputOrderImpl(metadata_snapshot, required_sort_description, elements_actions, limit);
+    return getInputOrderImpl(metadata_snapshot->getSortingKeyColumns(), required_sort_description, elements_actions, limit);
 }
 
 }

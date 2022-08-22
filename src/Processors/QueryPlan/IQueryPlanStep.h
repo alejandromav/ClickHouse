@@ -32,7 +32,7 @@ public:
     bool has_single_port = false;
 
     /// How data is sorted.
-    enum class SortMode
+    enum class SortMode : UInt8
     {
         None,
         Chunk, /// Separate chunks are sorted
@@ -60,6 +60,12 @@ public:
     bool hasEqualHeaderWith(const DataStream & other) const
     {
         return blocksHaveEqualStructure(header, other.header);
+    }
+
+    template <typename T>
+    bool isSortedBy(const T & prefix) const
+    {
+        return sort_mode >= SortMode::Port && sort_description.hasPrefix(prefix);
     }
 };
 
