@@ -8,6 +8,8 @@
 #include <iostream>
 #include <magic_enum.hpp>
 
+// NOLINTBEGIN(*)
+
 /** Usage:
   *
   * DUMP(variable...)
@@ -182,3 +184,5 @@ Out & dump(Out & out, const char * name, T && x)
 #define MAKE_VAR_MACRO(PREFIX, ...) MAKE_VAR_MACRO_IMPL(PREFIX, VA_NUM_ARGS(__VA_ARGS__))
 
 #define DUMP(...) MAKE_VAR_MACRO(DUMP, __VA_ARGS__)(__VA_ARGS__)
+
+// NOLINTEND(*)

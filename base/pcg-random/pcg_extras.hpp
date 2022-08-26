@@ -49,6 +49,8 @@
     #include <cxxabi.h>
 #endif
 
+// NOLINTBEGIN(*)
+
 /*
  * Abstractions for compiler-specific directives
  */
@@ -89,8 +91,6 @@
             pcg128_t(high,low)
     #define PCG_EMULATED_128BIT_MATH 1
 #endif
-
-// NOLINTBEGIN(*)
 
 namespace pcg_extras {
 

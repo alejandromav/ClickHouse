@@ -5,6 +5,7 @@
 #include <cstring>
 #include <base/extended_types.h>
 
+// NOLINTBEGIN(*)
 
 /// Allows to check the internals of IEEE-754 floating point number.
 
@@ -217,3 +218,5 @@ struct DecomposedFloat
 
 using DecomposedFloat64 = DecomposedFloat<double>;
 using DecomposedFloat32 = DecomposedFloat<float>;
+
+// NOLINTEND(*)

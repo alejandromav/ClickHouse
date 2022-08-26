@@ -4,6 +4,8 @@
 #include <memory>
 #include <utility>
 
+// NOLINTBEGIN(*)
+
 template <class F>
 class [[nodiscard]] basic_scope_guard
 {
@@ -113,3 +115,4 @@ const auto scope_exit##n = make_scope_guard([&] { __VA_ARGS__; })
 #define SCOPE_EXIT_FWD(n, ...) SCOPE_EXIT_CONCAT(n, __VA_ARGS__)
 #define SCOPE_EXIT(...) SCOPE_EXIT_FWD(__LINE__, __VA_ARGS__)
 
+// NOLINTEND(*)

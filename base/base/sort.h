@@ -7,6 +7,8 @@
 #include <pcg_random.hpp>
 #include <base/getThreadId.h>
 
+// NOLINTBEGIN(*)
+
 /** Same as libcxx std::__debug_less. Just without dependency on private part of standard library.
   * Check that Comparator induce strict weak ordering.
   */
@@ -131,3 +133,5 @@ void sort(RandomIt first, RandomIt last)
     using comparator = std::less<value_type>;
     ::sort(first, last, comparator());
 }
+
+// NOLINTEND(*)

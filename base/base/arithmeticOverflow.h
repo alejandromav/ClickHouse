@@ -3,6 +3,7 @@
 #include <base/extended_types.h>
 #include <base/defines.h>
 
+// NOLINTBEGIN(*)
 
 namespace common
 {
@@ -206,3 +207,5 @@ namespace common
         return false;
     }
 }
+
+// NOLINTEND(*)

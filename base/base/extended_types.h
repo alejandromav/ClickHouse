@@ -5,6 +5,7 @@
 #include <base/types.h>
 #include <base/wide_integer.h>
 
+// NOLINTBEGIN(*)
 
 using Int128 = wide::integer<128, signed>;
 using UInt128 = wide::integer<128, unsigned>;
@@ -105,3 +106,4 @@ template <> struct is_big_int<UInt256> { static constexpr bool value = true; };
 template <typename T>
 inline constexpr bool is_big_int_v = is_big_int<T>::value;
 
+// NOLINTEND(*)

@@ -8,6 +8,8 @@
 #include "musl_features.h"
 #include <stdint.h>
 
+// NOLINTBEGIN(*)
+
 #define EXP_TABLE_BITS 7
 #define EXP_POLY_ORDER 5
 #define EXP_USE_TOINT_NARROW 0
@@ -22,5 +24,7 @@ extern hidden const struct exp_data {
 	double exp2_poly[EXP2_POLY_ORDER];
 	uint64_t tab[2*(1 << EXP_TABLE_BITS)];
 } __exp_data;
+
+// NOLINTEND(*)
 
 #endif

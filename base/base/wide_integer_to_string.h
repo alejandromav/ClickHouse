@@ -6,6 +6,7 @@
 
 #include "wide_integer.h"
 
+// NOLINTBEGIN(*)
 
 namespace wide
 {
@@ -67,3 +68,5 @@ struct fmt::formatter<wide::integer<Bits, Signed>>
         return format_to(ctx.out(), "{}", to_string(value));
     }
 };
+
+// NOLINTEND(*)

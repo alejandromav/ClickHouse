@@ -5,6 +5,7 @@
 #include <base/StringRef.h>
 #include <base/types.h>
 
+// NOLINTBEGIN(*)
 
 /** Очень простой класс для чтения JSON (или его кусочков).
   * Представляет собой ссылку на кусок памяти, в котором содержится JSON (или его кусочек).
@@ -217,3 +218,5 @@ T JSON::getWithDefault(const std::string & key, const T & default_) const
     else
         return default_;
 }
+
+// NOLINTEND(*)

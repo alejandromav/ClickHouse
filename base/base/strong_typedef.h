@@ -5,6 +5,8 @@
 #include <utility>
 
 
+// NOLINTBEGIN(*)
+
 template <typename T, typename Tag>
 struct StrongTypedef
 {
@@ -62,3 +64,4 @@ namespace std
     struct D ## Tag {}; \
     using D = StrongTypedef<T, D ## Tag>; \
 
+// NOLINTEND(*)

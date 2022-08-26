@@ -32,6 +32,7 @@
 #include <type_traits>
 #include <base/extended_types.h>
 
+// NOLINTBEGIN(*)
 
 namespace impl
 {
@@ -442,3 +443,5 @@ inline char * itoa(Int256 i, char * p)
 {
     return impl::writeSIntText(i, p);
 }
+
+// NOLINTEND(*)
