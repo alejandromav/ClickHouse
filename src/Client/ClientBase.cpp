@@ -1999,6 +1999,8 @@ void ClientBase::runInteractive()
     /// Enable bracketed-paste-mode so that we are able to paste multiline queries as a whole.
     lr.enableBracketedPaste();
 
+    String last_input;
+
     do
     {
         auto input = lr.readLine(prompt(), ":-] ");
@@ -2034,10 +2036,14 @@ void ClientBase::runInteractive()
             }
         }
 
+        if (input == ".")
+            input = last_input;
+
         try
         {
             if (!processQueryText(input))
                 break;
+            last_input = input;
         }
         catch (const Exception & e)
         {
